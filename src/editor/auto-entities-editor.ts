@@ -179,9 +179,9 @@ class AutoEntitiesEditor extends LitElement {
     if (!this._config) return;
 
     const card = { ...ev.detail.config };
-    this._config.entities = [ ...card[this._config.card_param || "entities"] ];
+    const entities = [ ...card[this._config.card_param || "entities"] ];
     delete card[this._config.card_param || "entities"];
-    this._config = { ...this._config, card };
+    this._config = { ...this._config, card, entities };
 
     this._cardGUIModeAvailable = ev.detail.guiModeAvailable;
 
