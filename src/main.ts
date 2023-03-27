@@ -215,7 +215,8 @@ class AutoEntities extends LitElement {
       return typeof entity === "string" ? { entity: entity.trim() } : entity;
     };
 
-    let entities: EntityList = [...(this._config?.entities?.map(format) || [])];
+    let required_entities: EntityList = [...(this._config?.entities?.map(format) || [])];
+    let entities: EntityList = [];
 
     if (!this.hass) {
       return entities;
@@ -230,6 +231,13 @@ class AutoEntities extends LitElement {
       const all_entities = Object.keys(this.hass.states).map(format);
       for (const filter of this._config.filter.include) {
         if (filter.type) {
+          if (filter.type.match(
+            "entities"
+          )){
+            entities = entities.concat(required_entities);
+            required_entities = [];
+            continue;
+          }
           entities.push(filter);
           continue;
         }
@@ -260,6 +268,8 @@ class AutoEntities extends LitElement {
         entities = entities.concat(add);
       }
     }
+
+    entities = required_entities.concat(entities);
 
     // TODO: Add tests for exclusions
     if (this._config.filter?.exclude) {
