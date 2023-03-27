@@ -55,6 +55,8 @@ export interface AutoEntitiesConfig {
   unique?: boolean | string;
   sort?: any;
 
+  domain_options?: any[];
+
   entity_ids?: any[];
 }
 
