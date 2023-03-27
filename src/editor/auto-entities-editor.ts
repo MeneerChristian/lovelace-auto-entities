@@ -171,7 +171,7 @@ class AutoEntitiesEditor extends LitElement {
   }
   _getCardConfig() {
     const cfg = { ...this._config.card };
-    cfg[this._config.card_param || "entities"] = { ...this._config.entities };
+    cfg[this._config.card_param || "entities"] = [ ...this._config.entities ];
     return cfg;
   }
   _handleCardConfigChanged(ev) {
