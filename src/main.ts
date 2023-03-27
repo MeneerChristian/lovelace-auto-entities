@@ -303,15 +303,16 @@ class AutoEntities extends LitElement {
     {
       let newEntities: EntityList = [];
       for (const e of entities) {
+        var newEntity = e;
         if (e.entity) {
           for (const d of this._config?.domain_options) {
-            if (e.entity_id.startsWith(d.domain + ".")) {
-              e = { ...e, ...d.options }
+            if (e.entity.startsWith(d.domain + ".")) {
+              newEntity = { ...e, ...d.options }
             }
           }
         }
 
-        newEntities.push(e);
+        newEntities.push(newEntity);
       }
 
       entities = newEntities;
