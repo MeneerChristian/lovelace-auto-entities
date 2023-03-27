@@ -121,7 +121,7 @@ class AutoEntitiesEditor extends LitElement {
     const data = form2filter(this._config, ev.detail.value);
     const include = [...this._config.filter?.include];
     include[group] = { ...data, options: include[group].options };
-    this._config.filter = { ...this._config.filter, include };
+    this._config = { ...this._config, filter: { ...this._config.filter, include: include } };
     this.dispatchEvent(
       new CustomEvent("config-changed", { detail: { config: this._config } })
     );
@@ -259,7 +259,7 @@ class AutoEntitiesEditor extends LitElement {
   }
 
   _renderFilterEditor() {
-    if (this._config.filter?.template || this._config.entities)
+    if (this._config.filter?.template)
       return html`
         <div class="box">
           <p>

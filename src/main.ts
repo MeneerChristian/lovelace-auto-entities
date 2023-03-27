@@ -317,7 +317,7 @@ class AutoEntities extends LitElement {
         if (e.entity) {
           for (const d of this._config?.domain_options) {
             if (e.entity.startsWith(d.domain + ".")) {
-              newEntity = { ...e, ...d.options }
+              newEntity = { ...d.options, ...e }
             }
           }
         }
