@@ -60,7 +60,7 @@ function t(t,e,i,n){var s,o=arguments.length,r=o<3?e:null===n?n=Object.getOwnPro
                 <ha-icon .icon=${"mdi:close"}></ha-icon>
               </mwc-icon-button>
             </div>
-            ${void 0===t.type?N`                  
+            ${void 0===t.type?N`
                   ${void 0!==(null===(i=t.options)||void 0===i?void 0:i.type)?N`
                         <p>Options:</p>
                         <div>
