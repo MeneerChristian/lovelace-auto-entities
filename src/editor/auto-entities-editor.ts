@@ -108,7 +108,7 @@ class AutoEntitiesEditor extends LitElement {
       cfg["type"] = "entity";
     }
     if (cfg?.entity === undefined) {
-      cfg["entity"] = "light.light_group";
+      cfg["entity"] = "placeholder";
     }
 
     return cfg;
@@ -119,6 +119,11 @@ class AutoEntitiesEditor extends LitElement {
     if (!this._config) return;
 
     const data = { ...ev.detail.config, ...ev.detail.value?.options };
+
+    if (data.entity === "placeholder") {
+      delete data.entity;
+    }
+
     const include = [...this._config.filter?.include];
     include[group] = { ...include[group], options: { ...data } };
     const filter = { ...this._config.filter, include };
