@@ -100,13 +100,27 @@ class AutoEntitiesEditor extends LitElement {
       new CustomEvent("config-changed", { detail: { config: this._config } })
     );
   }
+
+  _getGroupOptions(group) {
+    const cfg = { ...group.options };
+
+    if (cfg?.type === undefined) {
+      cfg["type"] = "entity";
+    }
+    if (cfg?.entity === undefined) {
+      cfg["entity"] = "light.light_group";
+    }
+
+    return cfg;
+  } 
+
   async _changeGroupOptions(group, ev) {
+    ev.stopPropagation();
     if (!this._config) return;
 
-    const data = ev.detail.value;
-
+    const data = { ...ev.detail.config, ...ev.detail.value?.options };
     const include = [...this._config.filter?.include];
-    include[group] = { ...data };
+    include[group].options = { ...data };
     const filter = { ...this._config.filter, include };
     this._config = { ...this._config, filter };
 
@@ -121,7 +135,8 @@ class AutoEntitiesEditor extends LitElement {
     const data = form2filter(this._config, ev.detail.value);
     const include = [...this._config.filter?.include];
     include[group] = { ...data, options: include[group].options };
-    this._config = { ...this._config, filter: { ...this._config.filter, include: include } };
+    const filter = { ...this._config.filter, include }
+    this._config = { ...this._config, filter };
     this.dispatchEvent(
       new CustomEvent("config-changed", { detail: { config: this._config } })
     );
@@ -294,23 +309,53 @@ class AutoEntitiesEditor extends LitElement {
               </mwc-icon-button>
             </div>
             ${group.type === undefined
-              ? html`
-                  <ha-form
-                    .hass=${this.hass}
-                    .schema=${filterGroupSchema(group)}
-                    .data=${filter2form(group)}
-                    .computeLabel=${(s) => s.label ?? s.name}
-                    @value-changed=${(ev) => this._changeFilter(group_idx, ev)}
-                  ></ha-form>
-                  <p>Options:</p>
-                  <ha-form
-                    .hass=${this.hass}
-                    .schema=${filterGroupOptionsSchema}
-                    .data=${group}
-                    @value-changed=${(ev) =>
-                      this._changeGroupOptions(group_idx, ev)}
-                  ></ha-form>
-                `
+              ? html`                  
+                  ${group.options?.type !== undefined
+                    ? html`
+                        <p>Options:</p>
+                        <div>
+                          <mwc-button
+                            @click=${this._toggleCardMode}
+                            .disabled=${!this._cardGUIModeAvailable}
+                            class="gui-mode-button"
+                          >
+                            ${!this._cardEditorEl || this._cardGUIMode
+                              ? "Show code editor"
+                              : "Show Visual Editor"}
+                          </mwc-button>
+                          <mwc-button
+                            .title=${"Change card type"}
+                            @click=${() => this._deleteFilterGroup(group_idx)}
+                          >
+                            Change card type
+                          </mwc-button>
+                        </div>
+                        <hui-card-element-editor
+                          .hass=${this.hass}
+                          .lovelace=${this.lovelace}
+                          .value=${this._getGroupOptions(group)}
+                          @config-changed=${(ev) => this._changeGroupOptions(group_idx, ev)}
+                          @GUImode-changed=${this._cardGUIModeChanged}
+                        ></hui-card-element-editor>
+                    `
+                    : html`
+                        <ha-form
+                          .hass=${this.hass}
+                          .schema=${filterGroupSchema(group)}
+                          .data=${filter2form(group)}
+                          .computeLabel=${(s) => s.label ?? s.name}
+                          @value-changed=${(ev) => this._changeFilter(group_idx, ev)}
+                        ></ha-form>
+                        <p>Options:</p>
+                        <ha-form
+                          .hass=${this.hass}
+                          .schema=${filterGroupOptionsSchema}
+                          .data=${group}
+                          @value-changed=${(ev) =>
+                            this._changeGroupOptions(group_idx, ev)}
+                        ></ha-form>
+                    `}
+              `
               : html`
                   <ha-form
                     .hass=${this.hass}
@@ -319,7 +364,7 @@ class AutoEntitiesEditor extends LitElement {
                     @value-changed=${(ev) =>
                       this._changeSpecialEntry(group_idx, ev)}
                   ></ha-form>
-                `}
+              `}
           </div>
         `
       )}
