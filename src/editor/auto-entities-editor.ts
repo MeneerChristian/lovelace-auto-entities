@@ -120,7 +120,7 @@ class AutoEntitiesEditor extends LitElement {
 
     const data = { ...ev.detail.config, ...ev.detail.value?.options };
     const include = [...this._config.filter?.include];
-    include[group]['options'] = { ...data };
+    include[group] = { ...include[group], options: { ...data } };
     const filter = { ...this._config.filter, include };
     this._config = { ...this._config, filter };
 
