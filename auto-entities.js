@@ -61,6 +61,13 @@ function t(t,e,i,n){var s,o=arguments.length,r=o<3?e:null===n?n=Object.getOwnPro
               </mwc-icon-button>
             </div>
             ${void 0===t.type?N`
+                  <ha-form
+                    .hass=${this.hass}
+                    .schema=${(t=>{const e=Object.assign({},t);return delete e.options,[...Object.entries(e).map(It),Object.assign(Object.assign({},Nt),{name:"key_new",label:"Select property"})]})(t)}
+                    .data=${(t=>{const e=Object.assign({},t);return delete e.options,Object.assign({},...Object.entries(e).map((([t,e],i)=>({[`key_${i}`]:t,[`value_${i}`]:e}))))})(t)}
+                    .computeLabel=${t=>{var e;return null!==(e=t.label)&&void 0!==e?e:t.name}}
+                    @value-changed=${t=>this._changeFilter(e,t)}
+                  ></ha-form>
                   ${void 0!==(null===(i=t.options)||void 0===i?void 0:i.type)?N`
                         <p>Options:</p>
                         <div>
@@ -86,13 +93,6 @@ function t(t,e,i,n){var s,o=arguments.length,r=o<3?e:null===n?n=Object.getOwnPro
                           @GUImode-changed=${this._cardGUIModeChanged}
                         ></hui-card-element-editor>
                     `:N`
-                        <ha-form
-                          .hass=${this.hass}
-                          .schema=${(t=>{const e=Object.assign({},t);return delete e.options,[...Object.entries(e).map(It),Object.assign(Object.assign({},Nt),{name:"key_new",label:"Select property"})]})(t)}
-                          .data=${(t=>{const e=Object.assign({},t);return delete e.options,Object.assign({},...Object.entries(e).map((([t,e],i)=>({[`key_${i}`]:t,[`value_${i}`]:e}))))})(t)}
-                          .computeLabel=${t=>{var e;return null!==(e=t.label)&&void 0!==e?e:t.name}}
-                          @value-changed=${t=>this._changeFilter(e,t)}
-                        ></ha-form>
                         <p>Options:</p>
                         <ha-form
                           .hass=${this.hass}

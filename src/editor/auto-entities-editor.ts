@@ -315,6 +315,13 @@ class AutoEntitiesEditor extends LitElement {
             </div>
             ${group.type === undefined
               ? html`
+                  <ha-form
+                    .hass=${this.hass}
+                    .schema=${filterGroupSchema(group)}
+                    .data=${filter2form(group)}
+                    .computeLabel=${(s) => s.label ?? s.name}
+                    @value-changed=${(ev) => this._changeFilter(group_idx, ev)}
+                  ></ha-form>
                   ${group.options?.type !== undefined
                     ? html`
                         <p>Options:</p>
@@ -344,13 +351,6 @@ class AutoEntitiesEditor extends LitElement {
                         ></hui-card-element-editor>
                     `
                     : html`
-                        <ha-form
-                          .hass=${this.hass}
-                          .schema=${filterGroupSchema(group)}
-                          .data=${filter2form(group)}
-                          .computeLabel=${(s) => s.label ?? s.name}
-                          @value-changed=${(ev) => this._changeFilter(group_idx, ev)}
-                        ></ha-form>
                         <p>Options:</p>
                         <ha-form
                           .hass=${this.hass}
