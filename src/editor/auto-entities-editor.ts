@@ -134,6 +134,19 @@ class AutoEntitiesEditor extends LitElement {
     );
   }
 
+  _deleteGroupOptions(group) {
+    delete group.options;
+    
+    const include = [...this._config.filter?.include];
+    include[group] = { ...include[group], options: [] };
+    const filter = { ...this._config.filter, include };
+    this._config = { ...this._config, filter };
+
+    this.dispatchEvent(
+      new CustomEvent("config-changed", { detail: { config: this._config } })
+    );
+  }
+
   _changeFilter(group, ev) {
     if (!this._config) return;
 
@@ -337,7 +350,7 @@ class AutoEntitiesEditor extends LitElement {
                           </mwc-button>
                           <mwc-button
                             .title=${"Change card type"}
-                            @click=${() => this._deleteFilterGroup(group_idx)}
+                            @click=${() => this._deleteGroupOptions(group_idx)}
                           >
                             Change card type
                           </mwc-button>
